@@ -135,3 +135,5 @@ volumes/
 # IDEs
 .idea
 .vscode
+
+staticfiles

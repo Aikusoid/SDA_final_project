@@ -36,11 +36,14 @@ class Category(BaseModel):
     name = models.CharField(max_length=512, unique=True, blank=True)
     # parent categories and children categories (tree placement)
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 class Paint(BaseModel):
-    title = models.CharField(max_length=512, unique=True)
-    description = models.CharField(blank=True, default='')
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='category')
+    title = models.CharField(max_length=256, unique=True)
+    description = models.CharField(max_length=512, blank=True, default='')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, related_name='paint')
     image = models.ImageField(null=False, blank=False, upload_to='products')
     price = models.DecimalField(decimal_places=2, max_digits=6)
     created = models.DateField()
@@ -56,7 +59,7 @@ class Paint(BaseModel):
 
 
 class Author(Person):
-    paint = models.ManyToManyField(Paint, related_name='paint', through='eshop.Paint')
+    works = models.ManyToManyField(Paint, related_name='works')
 
 
 class UserAccount(Person):
@@ -70,17 +73,17 @@ class UserAccount(Person):
 
 
 class OrderLine(BaseModel):
-    product = models.ManyToManyField(Paint, related_name='product', through='eshop.Order')
+    order_item = models.ManyToManyField(Paint, related_name='order_item')
     number_of_products = models.IntegerField()
-    price = models.OneToOneField(Paint.price, related_name='price')
+    cost = models.OneToOneField(Paint, on_delete=models.CASCADE, related_name='cost')
 
     def total_price(self):
-        return self.number_of_products * self.price
+        return self.number_of_products * self.cost
 
 
 class Order(BaseModel):
     user = models.OneToOneField(UserAccount, on_delete=models.CASCADE)
-    total_cost = models.OneToOneField(OrderLine, on_delete=models.CASCADE)
+    total_cost = models.ForeignKey(OrderLine, on_delete=models.CASCADE, related_name='total_price')
     firstname = models.CharField(max_length=30)
     lastname = models.CharField(max_length=30)
     city = models.CharField(max_length=30)
@@ -89,7 +92,7 @@ class Order(BaseModel):
     zipcode = models.IntegerField()
     phone = models.IntegerField()
     date_of_submission = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(default='Processing')
+    status = models.CharField(max_length=30, default='Processing')
     '''
     Order lines (entity)
     Client (entity)

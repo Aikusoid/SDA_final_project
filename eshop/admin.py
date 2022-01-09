@@ -12,7 +12,7 @@ class PaintAdmin(admin.ModelAdmin):
 
 
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ['id', 'paint', 'first_name', 'last_name', 'date_of_birth']
+    list_display = ['id', 'first_name', 'last_name', 'date_of_birth']
 
 
 admin.site.register(Paint, PaintAdmin)
