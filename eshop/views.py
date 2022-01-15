@@ -51,4 +51,6 @@ class CategoryDetailView(DetailView):
         return TemplateResponse(request, 'category_detail.html', context=context)
 
 
-
+class PaintDetailView(DetailView):
+    model = Paint
+    template_name = 'paint_detail.html'

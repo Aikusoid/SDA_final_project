@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block current_tab %}{{ paint.title }}{% endblock current_tab %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <img src="/static/products/{{paint.title}}.jpg" alt="{{paint.title}}" width="600">
+            </div>
+            <div class="col">
+                <h5 class="m-auto">{{paint.title}}</h5>
+                <p>{{ paint.description }}</p>
+                <p><em>{{ paint.category }}</em></p>
+                <a href="#" class="btn btn-primary">Add to cart</a>
+                <a href="#" class="btn btn-primary">Add to a wish list</a>
+            </div>
+        </div>
+    </div>
+<!--    {% if request.user.is_authenticated %}-->
+<!--        <div class="text-center">-->
+<!--            <a href="#" class="btn btn-primary">Update</a>-->
+<!--        </div>-->
+<!--    {% endif %}-->
+{% endblock body %}
