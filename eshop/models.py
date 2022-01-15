@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.urls import reverse
 
 
 class BaseModel(models.Model):
@@ -43,8 +44,8 @@ class Category(BaseModel):
 class Paint(BaseModel):
     title = models.CharField(max_length=256, unique=True)
     description = models.CharField(max_length=512, blank=True, default='')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, related_name='paint')
-    image = models.ImageField(null=False, blank=False, upload_to='products')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, related_name='paints')
+    image = models.ImageField(null=False, blank=False, upload_to='./static/products')
     price = models.DecimalField(decimal_places=2, max_digits=6)
     created = models.DateField()
     height = models.IntegerField()
@@ -60,6 +61,9 @@ class Paint(BaseModel):
 
 class Author(Person):
     works = models.ManyToManyField(Paint, related_name='works')
+
+    def get_detail_url(self):
+        return reverse('author:detail', args=[self.pk])
 
 
 class UserAccount(Person):

@@ -1,0 +1,7 @@
+<ul class="accordion-body">
+    {% for category in categories %}
+        <li>
+            <a href="{% url 'category:detail' category.pk %}">{{ category.name }}</a>
+        </li>
+    {% endfor %}
+</ul>
