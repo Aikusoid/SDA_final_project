@@ -12,7 +12,10 @@
                 <h5 class="m-auto">{{paint.title}}</h5>
                 <p>{{ paint.description }}</p>
                 <p><em>{{ paint.category }}</em></p>
-                <a href="#" class="btn btn-primary">Add to cart</a>
+                <form action="{% url 'cart:add' pk %}" method="get">
+                    {% csrf_token %}
+                <input type="submit" class="btn btn-success" value="Add to cart">
+                </form>
                 <a href="#" class="btn btn-primary">Add to a wish list</a>
             </div>
         </div>

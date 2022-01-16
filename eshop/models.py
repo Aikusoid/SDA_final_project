@@ -1,6 +1,10 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
+from django.views.generic import TemplateView
+from django.views.generic.edit import FormMixin
 
 
 class BaseModel(models.Model):
@@ -33,6 +37,16 @@ class Person(BaseModel):
         return f'{self.first_name} {self.last_name}'
 
 
+class UserProfile(BaseModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    avatar = models.ImageField(null=True, blank=True, upload_to='profile_images')
+    city = models.CharField(max_length=30)
+    country = models.CharField(max_length=30)
+    street = models.CharField(max_length=30)
+    zipcode = models.IntegerField()
+    phone = models.IntegerField()
+
+
 class Category(BaseModel):
     name = models.CharField(max_length=512, unique=True, blank=True)
     # parent categories and children categories (tree placement)
@@ -50,13 +64,62 @@ class Paint(BaseModel):
     created = models.DateField()
     height = models.IntegerField()
     width = models.IntegerField()
+    quantity = models.IntegerField(default=1)
 
     @property
     def size(self):
         return f'{self.height} x {self.width}'
 
+    @property
+    def is_available(self):
+        if self.quantity > 0:
+            return True
+
     def __str__(self):
         return f'{self.title}'
+
+    def get_absolute_url(self):
+        return reverse('paint:detail', args=[self.pk])
+
+    def get_add_to_cart_url(self):
+        return reverse('cart:add', args=[self.pk])
+
+
+class OrderItem(BaseModel):
+    item = models.ForeignKey(Paint, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)
+    ordered = models.BooleanField(default=False)
+
+    @property
+    def total_item_price(self):
+        return self.quantity * self.item.price
+
+
+class Order(BaseModel):
+    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
+    ordered = models.BooleanField(default=False)
+    items = models.ManyToManyField(OrderItem)
+    start_date = models.DateTimeField(auto_now_add=True)
+    ordered_date = models.DateTimeField(auto_now_add=False)
+    # firstname = models.CharField(max_length=30)
+    # lastname = models.CharField(max_length=30)
+    # city = models.CharField(max_length=30)
+    # country = models.CharField(max_length=30)
+    # street = models.CharField(max_length=30)
+    # zipcode = models.IntegerField()
+    # phone = models.IntegerField()
+    # date_of_submission = models.DateTimeField(auto_now_add=True)
+    # status = models.CharField(max_length=30, default='Processing')
+
+    @property
+    def total_order_price(self):
+        total = 0
+        for order_item in self.items.all():
+            total += order_item.get_final_price()
+        return total
+
+    def get_absolute_url(self):
+        return reverse('cart:detail', args=[self.pk])
 
 
 class Author(Person):
@@ -64,43 +127,3 @@ class Author(Person):
 
     def get_detail_url(self):
         return reverse('author:detail', args=[self.pk])
-
-
-class UserAccount(Person):
-    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name='profile')
-    avatar = models.ImageField(null=True, blank=True, upload_to='profile_images')
-    city = models.CharField(max_length=30)
-    country = models.CharField(max_length=30)
-    street = models.CharField(max_length=30)
-    zipcode = models.IntegerField()
-    phone = models.IntegerField()
-
-
-class OrderLine(BaseModel):
-    order_item = models.ManyToManyField(Paint, related_name='order_item')
-    number_of_products = models.IntegerField()
-    cost = models.OneToOneField(Paint, on_delete=models.CASCADE, related_name='cost')
-
-    def total_price(self):
-        return self.number_of_products * self.cost
-
-
-class Order(BaseModel):
-    user = models.OneToOneField(UserAccount, on_delete=models.CASCADE)
-    total_cost = models.ForeignKey(OrderLine, on_delete=models.CASCADE, related_name='total_price')
-    firstname = models.CharField(max_length=30)
-    lastname = models.CharField(max_length=30)
-    city = models.CharField(max_length=30)
-    country = models.CharField(max_length=30)
-    street = models.CharField(max_length=30)
-    zipcode = models.IntegerField()
-    phone = models.IntegerField()
-    date_of_submission = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=30, default='Processing')
-    '''
-    Order lines (entity)
-    Client (entity)
-    Status (enum)
-    '''
-
-

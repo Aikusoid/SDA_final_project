@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block current_tab %}Your cart{% endblock current_tab %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                <div class="list-group">
+                    {% for item in items %}
+                        <label class="list-group-item">
+                            <div class="row">
+                                <div class="col">
+                                    <img src="/static/products/{{item.title}}.jpg" alt="{{item.title}}" width="64">
+                                </div>
+                                <div class="col">
+                                    <h6>{{item.title}}</h6>
+                                </div>
+                                <div class="col">
+                                    <h6>{{item.quantity}}</h6>
+                                </div>
+                                <div class="col">
+                                    <h6>{{item.total_item_price}}</h6>
+                                </div>
+                                <div class="col">
+                                    <button><i class="fas fa-trash-alt"></i></button>
+                                </div>
+                            </div>
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col">
+                <h4>Total order</h4>
+                <h3 class="text-bold">{{total_order_price}}</h3>
+                <button class="btn btn-success">Submit order</button>
+            </div>
+        </div>
+    </div>
+<!--    {% if request.user.is_authenticated %}-->
+<!--        <div class="text-center">-->
+<!--            <a href="#" class="btn btn-primary">Update</a>-->
+<!--        </div>-->
+<!--    {% endif %}-->
+{% endblock body %}

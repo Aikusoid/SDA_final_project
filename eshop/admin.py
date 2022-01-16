@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from eshop.models import Paint, Category, Author
+from eshop.models import Paint, Category, Author, OrderItem, Order
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -15,6 +15,16 @@ class AuthorAdmin(admin.ModelAdmin):
     list_display = ['id', 'first_name', 'last_name', 'date_of_birth']
 
 
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ['id', 'item']
+
+
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'ordered', 'start_date', 'ordered', 'ordered_date']
+
+
 admin.site.register(Paint, PaintAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Author, AuthorAdmin)
+admin.site.register(OrderItem, OrderItemAdmin)
+admin.site.register(Order, OrderAdmin)
