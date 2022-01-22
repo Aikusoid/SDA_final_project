@@ -4,17 +4,21 @@
 
 {% block body %}
     <div>Some text</div>
-    {% for paint in paintings %}
-        <div class="card" style="width: 18rem;">
-            <img src="/static/products/{{paint.title}}.jpg" class="card-img-top" alt="{{paint.title}}">
-            <div class="card-body">
-                <h5 class="card-title">{{paint.title}}</h5>
-                <p class="card-text">{{ paint.description }}</p>
-                <a href="{% url 'paint:detail' paint.pk %}" class="btn btn-primary">View details</a>
-                <a href="#" class="btn btn-primary">Add to cart</a>
+    <div class="container">
+        <div class="row m-auto">
+        {% for paint in paintings %}
+            <div class="col-4 m-5 card" style="width: 20rem;">
+                <img src="/static/products/{{paint.title}}.jpg" class="card-img-top" alt="{{paint.title}}">
+                <div class="card-body">
+                    <h5 class="card-title">{{paint.title}}</h5>
+                    <p class="card-text">{{ paint.description }}</p>
+                    <a href="{% url 'paint:detail' paint.pk %}" class="btn btn-primary">View details</a>
+                    <a href="#" class="btn btn-primary">Add to cart</a>
+                </div>
             </div>
+        {% endfor %}
         </div>
-    {% endfor %}
+    </div>
 <!--    {% if request.user.is_authenticated %}-->
 <!--        <div class="text-center">-->
 <!--            <a href="#" class="btn btn-primary">Update</a>-->

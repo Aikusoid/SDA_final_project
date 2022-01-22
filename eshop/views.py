@@ -81,19 +81,23 @@ class AddToCartView(DetailView, SuccessMessageMixin):
         pk = kwargs['pk']
         print(pk)
         item = get_object_or_404(Paint, pk=pk)
-        order_item = OrderItem.objects.get_or_create(
-            item=item,
-            ordered=False
+
+        order, _ = Order.objects.get_or_create(
+            user=UserProfile.objects.get(user=request.user),
+            ordered=False,
         )
 
-        ordered_items = Order.objects.filter(ordered=False)
+        order_item, _ = OrderItem.objects.get_or_create(
+            item=item,
+            ordered=False,
+            order=order,
+        )
 
         # If we already have smth in cart
         if item.is_available:
-            if ordered_items.exists():
-                order = ordered_items[0]
+            if True:
                 # if we have already added this item to cart and want to add more units
-                if order.items.filter(pk=pk).exists():
+                if order.orderitem_set.filter(pk=pk).exists():
                     order_item.quantity += 1
                     order_item.save(update_fields=['quantity', ])
                     messages.success(request, 'Added to cart!')
@@ -102,8 +106,9 @@ class AddToCartView(DetailView, SuccessMessageMixin):
                     messages.info(request, "Added to cart!")
             else:
                 ordered_date = timezone.now()
-                order = Order.objects.create(ordered_date=ordered_date)
+                order = Order(ordered_date=ordered_date, user=order.user)
                 order.items.add(order_item)
+                order.save()
                 messages.success(request, 'Added to cart!')
 
             item.quantity -= 1

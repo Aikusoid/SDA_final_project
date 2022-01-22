@@ -12,8 +12,9 @@ class RegistrationForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super(RegistrationForm, self).save(commit=True)
-        UserProfile.objects.create(user=user)
-        return user
+        user_profile = UserProfile.objects.create(user=user)
+        user_profile.save()
+        return user_profile
 
 
 class UserProfileForm(forms.ModelForm):

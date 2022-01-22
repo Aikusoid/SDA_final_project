@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
@@ -9,7 +11,8 @@ from django.views.generic.edit import FormMixin
 
 class BaseModel(models.Model):
     created = models.DateTimeField(
-        auto_now_add=True,
+        # auto_now_add=True,
+        default=datetime.utcnow,
         editable=False,
     )
     modified = models.DateTimeField(
@@ -87,6 +90,7 @@ class Paint(BaseModel):
 
 class OrderItem(BaseModel):
     item = models.ForeignKey(Paint, on_delete=models.CASCADE)
+    order = models.ForeignKey("Order", on_delete=models.CASCADE)
     quantity = models.IntegerField(default=0)
     ordered = models.BooleanField(default=False)
 
@@ -96,11 +100,10 @@ class OrderItem(BaseModel):
 
 
 class Order(BaseModel):
-    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     ordered = models.BooleanField(default=False)
-    items = models.ManyToManyField(OrderItem)
     start_date = models.DateTimeField(auto_now_add=True)
-    ordered_date = models.DateTimeField(auto_now_add=False)
+    ordered_date = models.DateTimeField(auto_now_add=False, null=True)
     # firstname = models.CharField(max_length=30)
     # lastname = models.CharField(max_length=30)
     # city = models.CharField(max_length=30)
