@@ -11,10 +11,10 @@
                         <label class="list-group-item">
                             <div class="row">
                                 <div class="col">
-                                    <img src="/static/products/{{item.title}}.jpg" alt="{{item.title}}" width="64">
+                                    <img src="/static/products/{{item.item.title}}.jpg" class="card-img-top" alt="{{item.title}}" width="64">
                                 </div>
                                 <div class="col">
-                                    <h6>{{item.title}}</h6>
+                                    <h6>{{item.item.title}}</h6>
                                 </div>
                                 <div class="col">
                                     <h6>{{item.quantity}}</h6>
@@ -23,7 +23,7 @@
                                     <h6>{{item.total_item_price}}</h6>
                                 </div>
                                 <div class="col">
-                                    <button><i class="fas fa-trash-alt"></i></button>
+                                    <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"><span></span></button>
                                 </div>
                             </div>
                         </label>
@@ -31,15 +31,15 @@
                 </div>
             </div>
             <div class="col">
-                <h4>Total order</h4>
-                <h3 class="text-bold">{{total_order_price}}</h3>
+                <h4 class="text-center">Total order</h4>
+                <h6 class="text-bold text-center">
+                    Items: {{total_items}}
+                </h6>
+                <h5 class="text-bold text-center">
+                    {{total_price}}
+                </h5>
                 <button class="btn btn-success">Submit order</button>
             </div>
         </div>
     </div>
-<!--    {% if request.user.is_authenticated %}-->
-<!--        <div class="text-center">-->
-<!--            <a href="#" class="btn btn-primary">Update</a>-->
-<!--        </div>-->
-<!--    {% endif %}-->
 {% endblock body %}

@@ -14,15 +14,9 @@
                     <p class="card-text">{{ paint.description }}</p>
                     <p class="card-text"><em>{{ paint.category }}</em></p>
                     <a href="{% url 'paint:detail' paint.pk %}" class="btn btn-primary">View details</a>
-                    <a href="#" class="btn btn-primary">Add to cart</a>
                 </div>
             </div>
         {% endfor %}
         </div>
     </div>
-<!--    {% if request.user.is_authenticated %}-->
-<!--        <div class="text-center">-->
-<!--            <a href="#" class="btn btn-primary">Update</a>-->
-<!--        </div>-->
-<!--    {% endif %}-->
 {% endblock body %}

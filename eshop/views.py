@@ -71,11 +71,6 @@ class PaintDetailView(DetailView):
         return TemplateResponse(request, 'paint_detail.html', context=context)
 
 
-# class OrderItemDetailView(DetailView, SuccessMessageMixin):
-#     model = OrderItem
-#     template_name = 'cart_detail.html'
-
-
 class AddToCartView(DetailView, SuccessMessageMixin):
     def get(self, request, *args, **kwargs):
         pk = kwargs['pk']
@@ -87,33 +82,25 @@ class AddToCartView(DetailView, SuccessMessageMixin):
             ordered=False,
         )
 
-        order_item, _ = OrderItem.objects.get_or_create(
+        order_item, created = OrderItem.objects.get_or_create(
             item=item,
             ordered=False,
             order=order,
         )
 
-        # If we already have smth in cart
         if item.is_available:
-            if True:
-                # if we have already added this item to cart and want to add more units
-                if order.orderitem_set.filter(pk=pk).exists():
-                    order_item.quantity += 1
-                    order_item.save(update_fields=['quantity', ])
-                    messages.success(request, 'Added to cart!')
-                else:
-                    order.items.add(order_item)
-                    messages.info(request, "Added to cart!")
-            else:
-                ordered_date = timezone.now()
-                order = Order(ordered_date=ordered_date, user=order.user)
-                order.items.add(order_item)
-                order.save()
+            if not created:
+                order_item.quantity += 1
+                order_item.save(update_fields=['quantity', ])
                 messages.success(request, 'Added to cart!')
+            else:
+                order_item.quantity = 1
+                order_item.save(update_fields=['quantity', ])
+                messages.success(request, "Added to cart!")
 
             item.quantity -= 1
             item.save(update_fields=['quantity', ])
-            return redirect("cart:detail", pk=pk)
+            return redirect("paint:detail", pk=pk)
 
         else:
             messages.error(request, 'This paint is no longer available.')
@@ -121,9 +108,25 @@ class AddToCartView(DetailView, SuccessMessageMixin):
             return redirect("paint:detail", pk=pk)
 
 
-class OrderDetailView(DetailView):
+class CartDetailView(DetailView):
     model = Order
-    template_name = 'cart_detail.html'
+    template_name = "cart_detail.html"
+
+    def get(self, request, *args, **kwargs):
+        user_profile = UserProfile.objects.get(user=request.user)
+        items = self.model.objects.get(user=user_profile).orderitem_set.all()
+        total_price = 0
+        total_items = 0
+        for item in items:
+            total_price += item.item.price * item.quantity
+            total_items += item.quantity
+
+        context = {
+            'items': items,
+            'total_price': total_price,
+            'total_items': total_items,
+        }
+        return TemplateResponse(request, "cart_detail.html", context=context)
 
 
 class RegistrationView(FormMixin, TemplateView):

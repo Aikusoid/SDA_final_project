@@ -1,41 +1,30 @@
 from django.urls import path, include
 
 from eshop.views import homepage_view, authorDetailView, CategoryDetailView, PaintDetailView, \
-    AddToCartView, OrderDetailView, LoginView, LogoutView, RegistrationView, UpdateUserProfile
+    AddToCartView, LoginView, LogoutView, RegistrationView, UpdateUserProfile, CartDetailView
 
 author_urlpatterns = (
     [
         path('detail/<int:pk>/', authorDetailView, name='detail'),
-        # path('create/', ActorCreateView.as_view(), name='create'),
-        # path('update/<int:pk>/', ActorUpdateView.as_view(), name='update'),
-        # path('delete/<int:pk>/', ActorDeleteView.as_view(), name='delete'),
     ], 'author'
 )
 
 category_urlpatterns = (
     [
         path('detail/<int:pk>/', CategoryDetailView.as_view(), name='detail'),
-        # path('create/', ActorCreateView.as_view(), name='create'),
-        # path('update/<int:pk>/', ActorUpdateView.as_view(), name='update'),
-        # path('delete/<int:pk>/', ActorDeleteView.as_view(), name='delete'),
     ], 'category'
 )
 
 paint_urlpatterns = (
     [
         path('detail/<int:pk>/', PaintDetailView.as_view(), name='detail'),
-        # path('create/', ActorCreateView.as_view(), name='create'),
-        # path('update/<int:pk>/', ActorUpdateView.as_view(), name='update'),
-        # path('delete/<int:pk>/', ActorDeleteView.as_view(), name='delete'),
     ], 'paint'
 )
 
 cart_urlpatterns = (
     [
-        path('detail/<int:pk>/', OrderDetailView.as_view(), name='detail'),
+        path('detail/<int:pk>/', CartDetailView.as_view(), name='detail'),
         path('add/<int:pk>/', AddToCartView.as_view(), name='add'),
-        # path('update/<int:pk>/', ActorUpdateView.as_view(), name='update'),
-        # path('delete/<int:pk>/', ActorDeleteView.as_view(), name='delete'),
     ], 'cart'
 )
 

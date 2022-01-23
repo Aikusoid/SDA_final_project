@@ -63,7 +63,7 @@ class Paint(BaseModel):
     description = models.CharField(max_length=512, blank=True, default='')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, related_name='paints')
     image = models.ImageField(null=False, blank=False, upload_to='./static/products')
-    price = models.DecimalField(decimal_places=2, max_digits=6)
+    price = models.DecimalField(decimal_places=2, max_digits=10)
     created = models.DateField()
     height = models.IntegerField()
     width = models.IntegerField()
@@ -104,22 +104,7 @@ class Order(BaseModel):
     ordered = models.BooleanField(default=False)
     start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField(auto_now_add=False, null=True)
-    # firstname = models.CharField(max_length=30)
-    # lastname = models.CharField(max_length=30)
-    # city = models.CharField(max_length=30)
-    # country = models.CharField(max_length=30)
-    # street = models.CharField(max_length=30)
-    # zipcode = models.IntegerField()
-    # phone = models.IntegerField()
-    # date_of_submission = models.DateTimeField(auto_now_add=True)
-    # status = models.CharField(max_length=30, default='Processing')
-
-    @property
-    def total_order_price(self):
-        total = 0
-        for order_item in self.items.all():
-            total += order_item.get_final_price()
-        return total
+    total = models.DecimalField(decimal_places=2, max_digits=10)
 
     def get_absolute_url(self):
         return reverse('cart:detail', args=[self.pk])

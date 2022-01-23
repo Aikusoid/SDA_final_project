@@ -12,16 +12,10 @@
                 <div class="card-body">
                     <h5 class="card-title">{{paint.title}}</h5>
                     <p class="card-text">{{ paint.description }}</p>
-                    <a href="{% url 'paint:detail' paint.pk %}" class="btn btn-primary">View details</a>
-                    <a href="#" class="btn btn-primary">Add to cart</a>
+                    <a href="{% url 'paint:detail' paint.pk %}" class="btn btn-primary m-auto">View details</a>
                 </div>
             </div>
         {% endfor %}
         </div>
     </div>
-<!--    {% if request.user.is_authenticated %}-->
-<!--        <div class="text-center">-->
-<!--            <a href="#" class="btn btn-primary">Update</a>-->
-<!--        </div>-->
-<!--    {% endif %}-->
 {% endblock body %}

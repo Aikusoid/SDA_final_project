@@ -14,15 +14,9 @@
                 <p><em>{{ paint.category }}</em></p>
                 <form action="{% url 'cart:add' pk %}" method="get">
                     {% csrf_token %}
-                <input type="submit" class="btn btn-success" value="Add to cart">
+                <input type="submit" class="btn btn-success m-auto" value="Add to cart">
                 </form>
-                <a href="#" class="btn btn-primary">Add to a wish list</a>
             </div>
         </div>
     </div>
-<!--    {% if request.user.is_authenticated %}-->
-<!--        <div class="text-center">-->
-<!--            <a href="#" class="btn btn-primary">Update</a>-->
-<!--        </div>-->
-<!--    {% endif %}-->
 {% endblock body %}
