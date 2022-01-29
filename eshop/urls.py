@@ -1,7 +1,8 @@
 from django.urls import path, include
 
 from eshop.views import homepage_view, authorDetailView, CategoryDetailView, PaintDetailView, \
-    AddToCartView, LoginView, LogoutView, RegistrationView, UpdateUserProfile, CartDetailView, RemoveFromCartView
+    AddToCartView, LoginView, LogoutView, RegistrationView, UpdateUserProfile, CartDetailView, RemoveFromCartView, \
+    CheckoutView
 
 author_urlpatterns = (
     [
@@ -38,11 +39,18 @@ auth_urlpatterns = (
     ], 'auth'
 )
 
+order_urlpatterns = (
+    [
+        path('checkout/', CheckoutView.as_view(), name='checkout'),
+    ], 'order'
+)
+
 urlpatterns = [
-    path('homepage/', homepage_view, name='homepage'),
+    path('', homepage_view, name='homepage'),
     path('author/', include(author_urlpatterns)),
     path('category/', include(category_urlpatterns)),
     path('paint/', include(paint_urlpatterns)),
     path('cart/', include(cart_urlpatterns)),
     path('auth/', include(auth_urlpatterns)),
+    path('order/', include(order_urlpatterns)),
 ]

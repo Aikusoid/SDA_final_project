@@ -1,8 +1,14 @@
+import random
+import string
+
+import stripe as stripe
+from django.conf import settings
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.template.response import TemplateResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -11,10 +17,11 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.views import View
 from django.views.generic import DetailView, FormView, TemplateView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import FormMixin, UpdateView
 
 from eshop.forms.accounts import RegistrationForm, UserProfileForm
+from eshop.forms.checkout import CheckoutForm
 from eshop.models import Paint, Author, Category, OrderItem, Order, UserProfile
 
 
@@ -205,3 +212,34 @@ class UpdateUserProfile(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     model = UserProfile
     success_message = 'Successfully updated profile'
     success_url = reverse_lazy('homepage')
+
+
+class CheckoutView(FormView):
+    form_class = CheckoutForm
+    template_name = 'checkout.html'
+    success_url = reverse_lazy('order:checkout')
+
+    def get_form(self, form_class=None):
+        return CheckoutForm(10, **self.get_form_kwargs())
+
+    def form_valid(self, form):
+        shipping_address = form.cleaned_data['shipping_address']
+        first_name = form.cleaned_data['first_name']
+        last_name = form.cleaned_data['last_name']
+        email = form.cleaned_data['email']
+        datetime_test = form.cleaned_data['datetime_test']
+        billing_address = form.cleaned_data['billing_address']
+        print(shipping_address)
+        print(first_name)
+        print(last_name)
+        print(email)
+        print(datetime_test)
+        print(billing_address)
+
+        return super(CheckoutView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        print('Form is invalid!')
+        return super(CheckoutView, self).form_invalid(form)
+
+

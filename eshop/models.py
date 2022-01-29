@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
+from django_countries.fields import CountryField
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormMixin
 
@@ -108,9 +109,6 @@ class Order(BaseModel):
     start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField(auto_now_add=False, null=True)
     total = models.DecimalField(decimal_places=2, max_digits=10)
-
-    # def get_absolute_url(self):
-    #     return reverse('cart:detail', args=[self.pk])
 
 
 class Author(Person):

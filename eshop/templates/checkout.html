@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block current_tab %}Order Checkout{% endblock current_tab %}
+
+{% block body %}
+<main >
+  <div class="container">
+    <div class="table-responsive text-nowrap">
+      <form action="{% url 'order:checkout' %}" method="post" class="d-flex flex-column">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" class="w-25 mt-3 btn btn-success" value="Save">
+      </form>
+    </div>
+</main>
+
+{% endblock body %}
+

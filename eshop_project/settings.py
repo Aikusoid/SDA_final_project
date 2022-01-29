@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'eshop',
     'fontawesomefree',
+    'django_countries',
 ]
 
 MIDDLEWARE = [
