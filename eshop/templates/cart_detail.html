@@ -1,45 +1,61 @@
 {% extends 'base.html' %}
 
-{% block current_tab %}Your cart{% endblock current_tab %}
+{% block current_tab %}Order Summary{% endblock current_tab %}
 
 {% block body %}
+<main>
     <div class="container">
-        <div class="row">
-            <div class="col-8">
-                <div class="list-group">
-                    {% for item in items %}
-                        <label class="list-group-item">
-                            <div class="row">
-                                <div class="col">
-                                    <img src="/static/products/{{item.item.title}}.jpg" class="card-img-top" alt="{{item.title}}" width="64">
-                                </div>
-                                <div class="col">
-                                    <h6>{{item.item.title}}</h6>
-                                </div>
-                                <div class="col">
-                                    <h6>{{item.quantity}}</h6>
-                                </div>
-                                <div class="col">
-                                    <h6>{{item.total_item_price}}</h6>
-                                </div>
-                                <div class="col">
-                                    <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"><span></span></button>
-                                </div>
-                            </div>
-                        </label>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="col">
-                <h4 class="text-center">Total order</h4>
-                <h6 class="text-bold text-center">
-                    Items: {{total_items}}
-                </h6>
-                <h5 class="text-bold text-center">
-                    {{total_price}}
-                </h5>
-                <button class="btn btn-success">Submit order</button>
-            </div>
+        <div class="table-responsive text-nowrap">
+            <table class="table w-75 m-auto">
+                <thead>
+                <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col">Title</th>
+                    <th scope="col" class="text-center">Price</th>
+                    <th scope="col" class="text-center">Quantity</th>
+                    <th scope="col" class="text-center">Total Item Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in items %}
+                <tr>
+                    <th scope="row">
+                        <img src="/static/products/{{item.item.title}}.jpg" alt="{{item.title}}" width="64">
+                    </th>
+                    <td>{{item.item.title}}</td>
+                    <td class="text-center">{{ item.item.price }}</td>
+                    <td class="text-center">
+                        <a href="{% url 'cart:remove' item.item.pk %}"><i class="fas fa-minus mr-2"></i></a>
+                        <span class="p-2">{{item.quantity}}</span>
+                        <a href="{% url 'cart:add' item.item.pk %}"><i class="fas fa-plus ml-2"></i></a>
+                    </td>
+                    <td class="text-center">
+                    <span>{{item.total_item_price}}</span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan='5'>Your cart is empty</td>
+                </tr>
+                <tr>
+                    <td colspan="5">
+                    <a class='btn btn-primary float-right' href="{% url 'homepage' %}">Continue shopping</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="4"><b>Order Total</b></td>
+                    <td class="text-center"><b>{{total_price}}</b></td>
+                </tr>
+                <tr>
+                    <td colspan="5">
+                    <a class='btn btn-warning float-right ml-2' href='#'>Proceed to checkout</a>
+                    <a class='btn btn-primary float-right' href="{% url 'homepage' %}">Continue shopping</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
+</main>
 {% endblock body %}

@@ -1,7 +1,7 @@
 from django.urls import path, include
 
 from eshop.views import homepage_view, authorDetailView, CategoryDetailView, PaintDetailView, \
-    AddToCartView, LoginView, LogoutView, RegistrationView, UpdateUserProfile, CartDetailView
+    AddToCartView, LoginView, LogoutView, RegistrationView, UpdateUserProfile, CartDetailView, RemoveFromCartView
 
 author_urlpatterns = (
     [
@@ -23,8 +23,9 @@ paint_urlpatterns = (
 
 cart_urlpatterns = (
     [
-        path('detail/<int:pk>/', CartDetailView.as_view(), name='detail'),
+        path('detail/', CartDetailView.as_view(), name='detail'),
         path('add/<int:pk>/', AddToCartView.as_view(), name='add'),
+        path('remove/<int:pk>/', RemoveFromCartView.as_view(), name='remove'),
     ], 'cart'
 )
 

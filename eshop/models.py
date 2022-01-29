@@ -87,6 +87,9 @@ class Paint(BaseModel):
     def get_add_to_cart_url(self):
         return reverse('cart:add', args=[self.pk])
 
+    def get_remove_from_cart_url(self):
+        return reverse('cart:remove', args=[self.pk])
+
 
 class OrderItem(BaseModel):
     item = models.ForeignKey(Paint, on_delete=models.CASCADE)
@@ -106,8 +109,8 @@ class Order(BaseModel):
     ordered_date = models.DateTimeField(auto_now_add=False, null=True)
     total = models.DecimalField(decimal_places=2, max_digits=10)
 
-    def get_absolute_url(self):
-        return reverse('cart:detail', args=[self.pk])
+    # def get_absolute_url(self):
+    #     return reverse('cart:detail', args=[self.pk])
 
 
 class Author(Person):

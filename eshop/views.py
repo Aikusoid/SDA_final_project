@@ -100,12 +100,41 @@ class AddToCartView(DetailView, SuccessMessageMixin):
 
             item.quantity -= 1
             item.save(update_fields=['quantity', ])
-            return redirect("paint:detail", pk=pk)
+            return redirect("cart:detail")
 
         else:
             messages.error(request, 'This paint is no longer available.')
 
             return redirect("paint:detail", pk=pk)
+
+
+class RemoveFromCartView(DetailView, SuccessMessageMixin):
+    def get(self, request, *args, **kwargs):
+        pk = kwargs['pk']
+        print(pk)
+        item = get_object_or_404(Paint, pk=pk)
+
+        order, _ = Order.objects.get_or_create(
+            user=UserProfile.objects.get(user=request.user),
+            ordered=False,
+        )
+
+        order_item, created = OrderItem.objects.get_or_create(
+            item=item,
+            ordered=False,
+            order=order,
+        )
+
+        if order_item.quantity > 1:
+            order_item.quantity -= 1
+            order_item.save(update_fields=['quantity', ])
+        elif order_item.quantity == 1:
+            order_item.delete()
+            messages.error(request, 'Item removed from cart')
+
+        item.quantity += 1
+        item.save(update_fields=['quantity', ])
+        return redirect("cart:detail")
 
 
 class CartDetailView(DetailView):

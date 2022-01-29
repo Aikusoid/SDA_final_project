@@ -20,7 +20,7 @@ class OrderItemAdmin(admin.ModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'ordered', 'start_date', 'ordered', 'ordered_date']
+    list_display = ['id', 'user', 'ordered', 'start_date', 'ordered_date']
 
 
 class UserProfileAdmin(admin.ModelAdmin):
