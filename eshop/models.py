@@ -26,7 +26,7 @@ class BaseModel(models.Model):
 
 
 class Person(BaseModel):
-    first_name = models.CharField(max_length=256)
+    first_name = models.CharField(max_length=256, )
     last_name = models.CharField(max_length=256)
     date_of_birth = models.DateField()
 
@@ -59,9 +59,17 @@ class Category(BaseModel):
         return f'{self.name}'
 
 
+class Artist(Person):
+    country = models.CharField(max_length=30)
+
+    def get_detail_url(self):
+        return reverse('artist:detail', args=[self.pk])
+
+
 class Paint(BaseModel):
     title = models.CharField(max_length=256, unique=True)
     description = models.CharField(max_length=512, blank=True, default='')
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE, related_name='paintings')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, related_name='paints')
     image = models.ImageField(null=False, blank=False, upload_to='./static/products')
     price = models.DecimalField(decimal_places=2, max_digits=10)
@@ -109,10 +117,3 @@ class Order(BaseModel):
     start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField(auto_now_add=False, null=True)
     total = models.DecimalField(decimal_places=2, max_digits=10)
-
-
-class Author(Person):
-    works = models.ManyToManyField(Paint, related_name='works')
-
-    def get_detail_url(self):
-        return reverse('author:detail', args=[self.pk])

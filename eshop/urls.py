@@ -1,13 +1,13 @@
 from django.urls import path, include
 
-from eshop.views import homepage_view, authorDetailView, CategoryDetailView, PaintDetailView, \
+from eshop.views import homepage_view, CategoryDetailView, PaintDetailView, \
     AddToCartView, LoginView, LogoutView, RegistrationView, UpdateUserProfile, CartDetailView, RemoveFromCartView, \
-    CheckoutView
+    CheckoutView, ArtistDetailView
 
-author_urlpatterns = (
+artist_urlpatterns = (
     [
-        path('detail/<int:pk>/', authorDetailView, name='detail'),
-    ], 'author'
+        path('detail/<int:pk>/', ArtistDetailView.as_view(), name='detail'),
+    ], 'artist'
 )
 
 category_urlpatterns = (
@@ -47,7 +47,7 @@ order_urlpatterns = (
 
 urlpatterns = [
     path('', homepage_view, name='homepage'),
-    path('author/', include(author_urlpatterns)),
+    path('artist/', include(artist_urlpatterns)),
     path('category/', include(category_urlpatterns)),
     path('paint/', include(paint_urlpatterns)),
     path('cart/', include(cart_urlpatterns)),

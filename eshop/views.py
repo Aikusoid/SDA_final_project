@@ -22,26 +22,39 @@ from django.views.generic.edit import FormMixin, UpdateView
 
 from eshop.forms.accounts import RegistrationForm, UserProfileForm
 from eshop.forms.checkout import CheckoutForm
-from eshop.models import Paint, Author, Category, OrderItem, Order, UserProfile
+from eshop.models import Paint, Artist, Category, OrderItem, Order, UserProfile
 
 
 def homepage_view(request):
     context = {
         'paintings': Paint.objects.all(),
-        'authors': Author.objects.all(),
+        'artists': Artist.objects.all(),
         'categories': Category.objects.all(),
         'prices_start_from': Paint.objects.all().count(),
     }
     return TemplateResponse(request, 'homepage.html', context=context)
 
 
-def authorDetailView(request, pk):
-    context = {
-        'paintings': Paint.objects.all(),
-        'author': Author.objects.get(pk=pk),
-    }
+class ArtistListView(View):
+    http_method_names = ['get', ]
 
-    return TemplateResponse(request, 'author_detail.html', context=context)
+    def get(self, request, *args, **kwargs):
+        context = {
+            'artists': Artist.objects.all(),
+        }
+        return TemplateResponse(request, 'artist_list.html', context=context)
+
+
+class ArtistDetailView(DetailView):
+    model = Artist
+    template_name = 'artist_detail.html'
+
+    def get(self, request, pk):
+        context = {
+            'paintings': Paint.objects.filter(artist=pk).all(),
+            'artist': Artist.objects.get(pk=pk),
+        }
+        return TemplateResponse(request, 'artist_detail.html', context=context)
 
 
 class CategoryListView(View):

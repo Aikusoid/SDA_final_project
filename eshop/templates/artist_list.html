@@ -1,0 +1,7 @@
+<ul class="accordion-body">
+    {% for artist in artists %}
+        <li>
+            <a href="{% url 'artist:detail' artist.pk %}">{{ artist.first_name }} {{ artist.last_name }}</a>
+        </li>
+    {% endfor %}
+</ul>

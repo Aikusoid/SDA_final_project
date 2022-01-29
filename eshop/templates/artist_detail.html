@@ -1,9 +1,8 @@
 {% extends 'base.html' %}
 
-{% block current_tab %}Author's Detail - {{ author.full_name }}{% endblock current_tab %}
+{% block current_tab %}Artist's Detail - {{ artist.full_name }}{% endblock current_tab %}
 
 {% block body %}
-    <div>Some text</div>
     <div class="container">
         <div class="row m-auto">
         {% for paint in paintings %}
