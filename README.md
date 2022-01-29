@@ -16,9 +16,4 @@ Now you can run the project with this command
 
 ```
 python manage.py runserver
-<<<<<<< HEAD
 ```
-=======
-```
-
->>>>>>> 0e022f370f633fc50b1c2bee0ad6314a3943add7
