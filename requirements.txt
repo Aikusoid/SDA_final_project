@@ -2,7 +2,7 @@ asgiref==3.4.1
 certifi==2021.10.8
 charset-normalizer==2.0.10
 config==0.5.1
-Django==4.0
+Django==4.0.4
 django-countries==7.2.1
 django-jazzmin==2.4.8
 fontawesome-free==5.15.4
